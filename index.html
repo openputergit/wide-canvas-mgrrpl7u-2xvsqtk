@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMT Finance Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .neu-brutal {
+            box-shadow: 10px 10px 0px #000;
+            border: 3px solid #000;
+            border-radius: 8px;
+        }
+
+        .correct {
+            background-color: #4ade80 !important;
+        }
+
+        .wrong {
+            background-color: #f87171 !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="neu-brutal bg-white p-6 mb-8">
+            <h1 class="text-4xl font-bold mb-4">MMT Finance Quiz</h1>
+            <p class="text-lg mb-4">Test your knowledge about MMT Finance and learn more about this innovative DeFi project!</p>
+        </div>
+
+        <div id="quiz-container" class="neu-brutal bg-white p-6">
+            <div id="question-container" class="mb-6">
+                <h2 class="text-2xl font-bold mb-4" id="question"></h2>
+                <div id="options" class="space-y-3"></div>
+            </div>
+            <div id="feedback" class="hidden mb-6 p-4 neu-brutal"></div>
+            <div class="flex justify-between items-center">
+                <span id="progress" class="text-lg font-bold"></span>
+                <button id="next-btn" class="neu-brutal bg-blue-500 text-white px-6 py-2 hover:bg-blue-600">Next Question</button>
+            </div>
+        </div>
+
+        <div id="results" class="hidden neu-brutal bg-white p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4">Quiz Complete!</h2>
+            <p class="text-lg mb-4">Your score: <span id="score"></span></p>
+            <p class="text-lg mb-4">Try out MMT Finance: <a href="https://mmt.finance" class="text-blue-500 hover:underline">Visit MMT Finance</a></p>
+            <button onclick="restartQuiz()" class="neu-brutal bg-green-500 text-white px-6 py-2 hover:bg-green-600">Retry Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is MMT Finance's main goal?",
+                options: [
+                    "To create a decentralized social trading platform",
+                    "To provide traditional banking services",
+                    "To build a centralized exchange",
+                    "To develop NFT marketplace"
+                ],
+                correct: 0,
+                explanation: "MMT Finance aims to create a decentralized social trading platform that allows users to copy successful traders' strategies."
+            },
+            {
+                question: "What is the native token of MMT Finance?",
+                options: [
+                    "MMT",
+                    "ETH",
+                    "BTC",
+                    "USDT"
+                ],
+                correct: 0,
+                explanation: "MMT is the native token of the MMT Finance ecosystem, used for governance and rewards."
+            },
+            {
+                question: "What blockchain does MMT Finance operate on?",
+                options: [
+                    "Binance Smart Chain",
+                    "Ethereum",
+                    "Polygon",
+                    "Solana"
+                ],
+                correct: 0,
+                explanation: "MMT Finance operates on the Binance Smart Chain (BSC) for fast and cost-effective transactions."
+            },
+            {
+                question: "What feature allows users to copy successful traders?",
+                options: [
+                    "Copy Trading",
+                    "Auto Trading",
+                    "Manual Trading",
+                    "Bot Trading"
+                ],
+                correct: 0,
+                explanation: "Copy Trading is a key feature that allows users to automatically replicate the trading strategies of successful traders."
+            },
+            {
+                question: "What is the purpose of MMT staking?",
+                options: [
+                    "Earn passive income and participate in governance",
+                    "Only for trading fees",
+                    "Just for governance",
+                    "No purpose"
+                ],
+                correct: 0,
+                explanation: "MMT staking allows users to earn passive income through rewards and participate in platform governance decisions."
+            },
+            {
+                question: "What is the maximum supply of MMT tokens?",
+                options: [
+                    "1 million",
+                    "10 million",
+                    "1 billion",
+                    "Unlimited"
+                ],
+                correct: 2,
+                explanation: "The maximum supply of MMT tokens is 1 billion to ensure scarcity and value."
+            },
+            {
+                question: "What kind of trading strategies can be copied?",
+                options: [
+                    "All available strategies",
+                    "Manual trades only",
+                    "Programmed bots only",
+                    "None"
+                ],
+                correct: 0,
+                explanation: "Users can copy all available strategies from top traders on the platform."
+            },
+            {
+                question: "What feature is essential for the governance model of MMT?",
+                options: [
+                    "Voting rights",
+                    "Profit sharing",
+                    "Token burn",
+                    "Airdrops"
+                ],
+                correct: 0,
+                explanation: "Holders of the MMT token have voting rights that influence the platform's development."
+            },
+            {
+                question: "Which of the following is NOT a DApp under MMT Finance?",
+                options: [
+                    "Market Maker",
+                    "Lending Platform",
+                    "Exchange",
+                    "Social Media"
+                ],
+                correct: 3,
+                explanation: "MMT Finance does not offer a social media platform as part of its DApps."
+            },
+            {
+                question: "What incentives does MMT Finance offer for early adopters?",
+                options: [
+                    "Airdrops",
+                    "Exclusive trading fees",
+                    "Partnership benefits",
+                    "All of the above"
+                ],
+                correct: 3,
+                explanation: "Early adopters benefit from airdrops, reduced trading fees, and partnership bonuses."
+            },
+            {
+                question: "How does MMT Finance ensure user security?",
+                options: [
+                    "Smart contract audits",
+                    "User feedback",
+                    "Minimum transaction limits",
+                    "Community guidelines"
+                ],
+                correct: 0,
+                explanation: "MMT Finance employs smart contract audits to maintain a secure environment for its users."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('question').textContent = question.question;
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-4 neu-brutal bg-white hover:bg-gray-100';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('progress').textContent = `Question ${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('feedback').classList.add('hidden');
+            answered = false;
+        }
+
+        function selectAnswer(index) {
+            if (answered) return;
+            answered = true;
+
+            const question = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const options = document.querySelectorAll('#options button');
+
+            options[question.correct].classList.add('correct');
+            if (index !== question.correct) {
+                options[index].classList.add('wrong');
+            }
+
+            feedback.innerHTML = `
+                <p class="font-bold ${index === question.correct ? 'text-green-600' : 'text-red-600'}">
+                    ${index === question.correct ? 'Correct!' : 'Incorrect!'}
+                </p>
+                <p class="mt-2">${question.explanation}</p>
+            `;
+            feedback.classList.remove('hidden');
+
+            if (index === question.correct) score++;
+        }
+
+        function nextQuestion() {
+            if (!answered) return;
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('score').textContent = `${score}/${questions.length}`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            displayQuestion();
+        }
+
+        document.getElementById('next-btn').addEventListener('click', nextQuestion);
+        displayQuestion();
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+
+</html>
